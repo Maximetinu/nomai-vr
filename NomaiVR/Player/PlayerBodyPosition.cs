@@ -104,6 +104,9 @@ namespace NomaiVR
                     Postfix<PlayerCharacterController>("UpdateTurning", nameof(Patch.PostCharacterTurning));
                     Postfix<JetpackThrusterController>("FixedUpdate", nameof(Patch.PostThrusterUpdate));
                     Prefix<OWCamera>("set_fieldOfView", nameof(Patch.PatchOWCameraFOV));
+                    
+                    // TODO: move this patch elsewhere
+                    Prefix<AstroObject>("Awake", nameof(PatchTHRotation));
                 }
 
                 private static void PostThrusterUpdate(Vector3 ____rotationalInput)
@@ -174,6 +177,13 @@ namespace NomaiVR
                     //Prevents changing the fov of VR cameras
                     //This prevents log spams in projection pools
                     return !__instance.mainCamera.stereoEnabled;
+                }
+
+                private static void PatchTHRotation(AstroObject __instance)
+                {
+                    if (__instance._name != AstroObject.Name.TimberHearth) return;
+
+                    __instance.transform.eulerAngles += new Vector3(37, 18, 0);
                 }
             }
 
